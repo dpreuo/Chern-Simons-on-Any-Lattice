@@ -1,0 +1,85 @@
+\appendix
+\section{Proof of the Simplicial Product Rule} \label{apx:chain_proof}
+
+These proofs are kind of sticky, so have been relegated to an appendix.
+Let us start by restating the four identities we need,
+\begin{align}
+    \partial \gamma &=\sum_{[v_1, ... ,v_{n}])} (v_1, ... ,v_{n}) 
+    \sum_{[v_0]\rightarrow [v_0, ... ,v_{n}]}
+    \gamma_{v_0, v_1, ... ,v_{n}}
+    \\
+    d\gamma
+    &= \sum_{[v_0, ... , v_{n+1}]}
+    (v_0, ... , v_{n+1})
+    \sum_{m = 0}^{n+1}(-1)^m
+    \gamma_{v_0...\hat v_m...v_{n+1}},
+    \\
+    \alpha^n \smile \beta^m &= \sum_{[v_0, ...,v_{n+m}]} 
+    \sum_{P} \frac{\sgn(P)}{(n+m+1)!} \alpha_{p_0 ...p_n}\beta_{p_n ...p_{n+m}} (v_0, ...v_n,...,v_{n+m}),
+    \\
+    \alpha^n \frown \beta^m &= \sum_{[v_0, ...,v_{n}]} 
+    \sum_{P} \frac{\sgn(P)}{(n+1)!} \alpha_{p_0 ...p_n}\beta_{v_0 ...v_m} (v_m,...,v_{n}).
+\end{align}
+
+
+\subsection{The Cup Product}
+To do so, let us explicitly calculate each of the three expressions in this identity
+\begin{align}
+    d (\alpha^n \smile \beta^m) &=
+    \sum_{[v_0...v_{n+m+1}]} 
+    (v_0 ... v_{n+m+1})
+    \sum_{u = 0}^{n+m+1}(-1)^u
+    \sum_{P_{\hat u}} 
+    \frac{\sgn(P_{\hat u})}{(n+m+1)!}
+    \alpha_{p_0...p_n} 
+    \beta_{p_n...p_{n+m}}
+    \\
+    d \alpha^n \smile \beta^m &= 
+    \sum_{[v_0...v_{n+m+1}]}
+    (v_0 ... v_{n+m+1})
+    \sum_{P}\frac{\sgn(P)}{(n+m+2)!}
+    \sum_{u = 0}^{n}
+    \\
+    (-1)^n \alpha^n \smile d\beta^m &= 
+    \sum_{[v_0...v_{n+m+1}]},
+\end{align}
+where $P_{\hat u}$ denotes a permutation of the indices $(v_0 ... \hat v_u ... v_{n+m+1})$, where vertex $v_u$ has been removed.
+
+\subsection{The Cap Product}
+
+\subsection{Some Examples}
+\begin{shaded}
+    {\it Single mom finds one weird vector identity for simplifying equations FAST --- } There is only one vector identity that is really relevant to this action, and it is the same one we used in \textsection{\ref{sec:continuous_special_time}}:
+    \begin{align} 
+            \nabla \times (a \textbf{A}) = \nabla a \times \textbf{A} + a \nabla \times \textbf{A},
+        \end{align}
+        where $a$ is a scalar and $\textbf A$ is a 1-field. Let us derive the simplicial equivalent of this expression
+        \begin{align}
+            d(\phi \alpha) = \sum_{[i,j]}\frac 12 (\phi_i + \phi_j) \alpha_{ij} d(i,j),
+        \end{align}
+        where we have used the definition presented above for 0-1-form multiplication. Taking the coboundary of (i,j) we arrive at the following
+        \begin{align}
+             d(\phi \alpha) &= \sum_{[i,j,k]}\frac 12 
+             \left [
+             (\phi_i + \phi_j)\alpha_{ij}
+             + (\phi_j + \phi_k)\alpha_{jk}
+             +(\phi_k + \phi_i)\alpha_{ki}
+             \right ]
+        \end{align}
+    which is rearranged to the form
+    \begin{align}
+        \begin{aligned}
+            d(\phi \alpha) &= \sum_{[i,j,k]} \frac 13 (\phi_i + \phi_j +\phi_k)(\alpha_{ij} + \alpha_{jk}+\alpha_{ki}) \\ 
+            &
+            + \sum_{[i,j,k]} \frac 16 \bigg [
+            [(\phi_i - \phi_k) + (\phi_j - \phi_k)]\alpha_{ij}
+            + [(\phi_j - \phi_i) + (\phi_k - \phi_i)]\alpha_{jk}\\& \qquad \qquad 
+            + [(\phi_k - \phi_j) + (\phi_i - \phi_j)]\alpha_{ki}
+            \bigg ] (i,j,k)
+        \end{aligned}
+    \end{align}
+    This looks like a mess, but consulting our earlier identities for cross and scalar product, we can actually see that this exactly evaluates
+    \begin{align}
+        d(\phi \alpha) = \phi d\alpha + d\phi \times \alpha.
+    \end{align}
+\end{shaded}

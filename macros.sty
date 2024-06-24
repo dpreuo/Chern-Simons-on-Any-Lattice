@@ -4,6 +4,7 @@
 \newcommand{\dline}[1]{\underline{\underline{#1}}}
 
 \newcommand{\inner}[1]{\left \langle #1  \right \rangle}
+\newcommand{\sgn}{\textup{sgn}}
 \newcommand{\tr}{\ensuremath{\textup{Tr}}}
 \newcommand{\1}{\ensuremath{\mathbbm{1}}}
 \newcommand{\re}{\ensuremath{\textup{Re}}}
@@ -16,7 +17,7 @@
 \newcommand{\qkit}{\mathcal Q_{\textup{Kit}}}
 \newcommand{\ujk}{u_{jk}}
 \newcommand{\pdag}{\phantom{\dag}}
-
+\renewcommand{\thefootnote}{\roman{footnote}}
 \newcommand{\loctr}{\textup{tr}}
 \newcommand{\egs}{E_\textup{g.s.}}
 
@@ -35,4 +36,10 @@
   \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
  {\endMakeFramed}
 \definecolor{shadecolor}{gray}{0.9}
-\renewcommand{\thefootnote}{\roman{footnote}}
+
+\newenvironment{incorrect}{%
+    \everypar={{\setbox0=\lastbox}\everypar{}}
+  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{wrongcolour}}%
+  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
+ {\endMakeFramed}
+\definecolor{wrongcolour}{rgb}{1,0.7,0.7}

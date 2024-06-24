@@ -1,26 +1,22 @@
 \documentclass[11pt, oneside]{article} %Use "amsart" instead of "article" for AMSLaTeX format
 
 \usepackage[left=2cm,top=3cm,right=2cm,bottom=4cm,head=1cm,a4paper]{geometry}    
-\usepackage[utf8]{inputenc}
 \usepackage{graphicx} %Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-\usepackage{graphicx}
+\usepackage{microtype}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
+\usepackage[capitalize]{cleveref}
+\creflabelformat{equation}{#2\textup{#1}#3}
 \usepackage{soul}
 \usepackage{dsfont}
 \usepackage{enumitem}
-\usepackage{amsmath}
 \usepackage{multicol}
-\usepackage{amssymb}
 \usepackage{braket}
 \numberwithin{equation}{section}
 \usepackage{bm}
 \usepackage{appendix}
-\usepackage{microtype}
 \usepackage[nobottomtitles*]{titlesec}
-\usepackage{hyperref}
-\usepackage{subfiles}
 \usepackage{bbm}
 \hypersetup{
     colorlinks,
@@ -29,6 +25,14 @@
     linkcolor=black,
     urlcolor=black
 }
+
+\usepackage[
+    % backend=biber, 
+    % style=phys,
+    % citestyle=numeric-comp,
+    % biblabel=brackets, 
+    % hyperref=true,
+]{biblatex}
 
 %Tikz stuff:
 \usepackage{tikz}
@@ -41,8 +45,7 @@
 
 \input{macros.sty}
 
-
-\bibliographystyle{unsrt}
+\bibliography{refs}
 \usepackage{wrapfig}
 \usepackage{caption}
 
@@ -57,9 +60,21 @@
 
 \tableofcontents
 
-\begin{shaded}
-    We start this document giving a \textit{massively} simplified account of \cite{sun_fradkin_2015}. Then, we will see if we can't find a more general way to express these ideas -- perhaps such that it can be more straightforwardly generalised to lattices without the face-vertex constraint that they require. That would be enough for a paper lol
-\end{shaded}
+\section*{A Quick Note On the Text}
+
+These notes are very much a work in progress, in particular some sections are incorrect and need to be fixed. 
+
+\begin{incorrect}
+I have highlighted such sections in red boxes like this
+\end{incorrect}
+
+\section{Paper To-Do List}
+Here are a few papers that I am still trying to understand that use these kinds of ideas (or modifications of them)
+\begin{itemize}
+    \item \cite{jacobson_modified_2023} Generalises these cup products and their related formalism for hypercubic chern simons theory -- I need to understand how they deal with coupling to an external field.
+    \item \cite{demarco_compact_2021} also this paper by Wen and Demarco -- has an appendix where they go over the method.
+\end{itemize}
+    
 
 \section{A Quick Chern Simons Recap}
 
@@ -138,7 +153,7 @@ Now, let us again prove that this quantity has the right gauge-invariance proper
     A_0 &\rightarrow A_0 + \dot \chi, \\
     \textbf A & \rightarrow A + \nabla \chi.
 \end{align}
-Under such a transformation, the magnetic field $B$ is invariant. Thus, the Lagrangian (Eq.~\ref{eqn:action_special_time_unfixed}) changes according to
+Under such a transformation, the magnetic field $B$ is invariant. Thus, the Lagrangian (\cref{eqn:action_special_time_unfixed}) changes according to
 \begin{align}
     \mathcal L \rightarrow \mathcal L  &+ 
     \frac{k}{4\pi} \left [  
@@ -166,10 +181,10 @@ where in the last line we used the fact that $\nabla \times \nabla \cdot  = 0$. 
 \begin{align}
     \mathcal L \rightarrow \mathcal L  &+ \frac{k}{4\pi}
     \Big [
-    \partial_0 (\chi B) + \nabla \times (\chi\nabla A_0 - \chi\textbf A)
+    \partial_0 (\chi B) + \nabla \times (\chi\nabla A_0 - \chi\dot {\textbf A})
     \Big ]
 \end{align}
-And so we see that, as expected, the change to the Lagrangian takes the form of a total derivative, consistent with Eq.~\ref{eqn:symmetric_change_lagrangian}.
+And so we see that, as expected, the change to the Lagrangian takes the form of a total derivative, consistent with \cref{eqn:symmetric_change_lagrangian}.
 
 \begin{shaded}
     \textit{Identities used in the above discussion:} These are the properies we will need to preserve when we define the lattive version of curl and cross product in the next section if we want the above derivation to have a lattice equivalent. 
@@ -206,7 +221,7 @@ for some invertible matrix $R$. Regular quantities will always transform as
 \end{align}
 whereas pseudo-quantities will transform as
 \begin{align}
-    \textup{pseudo scalar: }\omega' &= \textup{det}R \cdot \rho \\ 
+    \textup{pseudo scalar: }\omega' &= \textup{det}R \cdot \omega \\ 
     \textup{pseudo vector: } \textbf B' &=\textup{det}R \cdot R\textbf  B
 \end{align}
 In particular, pseudo-quantities pick up a sign change under reflections. More generally, i.e.~in the language of differential forms, the various fields that one might construct exist in the space of m-forms, where $m \leq d$, the dimension of the space. 
@@ -236,7 +251,7 @@ As we shall see, there is no unique answer to these questions, we will go throug
 
 \section{Fradkin's Discretisation}
 \begin{shaded}
-    Fradkin's notation is a bit all over the place - since the intention of this section is to get a broad grip with what \cite{sun_fradkin_2015} does, our notation here will also be a bit of a mess. Fear not! in the next section it will be all clarified and made nice. 
+    Feel free to skip this section -- this project originally started by trying to understand the proposal given by Fradkin and his team in \cite{sun_fradkin_2015}. I came to the conclusion that their method was a truly awful way to do this. This section gives a very brief overview of what they do, but in the next section i will present a much more beautiful way of doing the same thing.
 \end{shaded}
 Our starting point for Fradkin's lattice Chern-Simons theory is the `separate time and space' Lagrangian, which we re-express as 
 \begin{align}
@@ -284,7 +299,7 @@ where $f$ labels the face.
     a_j B_j\textup{, with } B_j = \sum_{(jk) \in f} A_{jk},
 \end{align}
 
-\textbf{Cross Product: } Finally we get to the cross product, where their definition is so profoundly arbitrary and ugly that I shall not sully this document with it. Suffice to say they encode the cross product in a matrix $K_{e,e'}$, the construction of which can only be described as a crime against humanity. If you want to suffer like I did, read the paper, however the long and short of it is that the substitution they make for the second term in \ref{eqn:fradkin_starting_point} is 
+\textbf{Cross Product: } Finally we get to the cross product, where their definition is so profoundly arbitrary and ugly that I shall not sully this document with it. Suffice to say they encode the cross product in a matrix $K_{e,e'}$, the construction of which can only be described as a crime against humanity. If you want to suffer like I did, read the paper, however the long and short of it is that the substitution they make for the second term in \cref{eqn:fradkin_starting_point} is 
 \begin{align}
     \int d^2x \textbf {A} \times \dot {\textbf {A}} 
     \rightarrow 
@@ -325,7 +340,7 @@ now let's use integration by parts to move the dot over on the second term here 
         - \frac 12 (\nabla \chi)_e K_{ee'} (\nabla \dot \chi)_e 
     \right ]
 \end{align}
-This expression should really be understood as the discrete version of Eqn.~\ref{eqn:cont_intermediate_gauge} in the previous section. Now what we need is a discrete form of the Curl-Cross identity (Eqn.~\ref{id:curl_cross}). Let us start with the integral form of the identity for a pair of arbitrary fields u and $\textbf X$, where we have discarded the part that is a total derivative:
+This expression should really be understood as the discrete version of \cref{eqn:cont_intermediate_gauge} in the previous section. Now what we need is a discrete form of the Curl-Cross identity (\cref{id:curl_cross}). Let us start with the integral form of the identity for a pair of arbitrary fields u and $\textbf X$, where we have discarded the part that is a total derivative:
 \begin{align}
 \begin{matrix}
       \int d^2x 
@@ -342,7 +357,7 @@ Finally a summary of the rest of Fradkin's paper. After spending a few pages pro
 
 Let us now try and fix Fradkin's formalism, and come up with a much more general, less arbitrary way of doing the same thing. To do this we will follow the rather beautiful introduction to the relevant concepts from algebraic topology \cite{schwalm_vector_1999}. The discussion in their paper is complete, and very clear, so we will just poach the results that we want to extract, and leave the proofs/justifications to be found in the source material. 
 
-The first thing to know is that their construction is defined specifically for a theory discretised on a \textit{simplicial complex}. Nakahara provides a nice introduction to simplices and their respective complexes \cite{nakahara_geometry_2003}, for the current project the only thing this means is that all plaquettes must be triangles. In practice this is not a terrible restriction, because we can always add edges to a given lattice to ensure that it satisfies this condition, as shown in Fig.~\ref{fig:simplices}a\footnote{Note that this is not a very unusual trick, see for example the triangulation used by Lieb in \cite{lieb_fluxes_2004}.}. 
+The first thing to know is that their construction is defined specifically for a theory discretised on a \textit{simplicial complex}. Nakahara provides a nice introduction to simplices and their respective complexes \cite{nakahara_geometry_2003}, for the current project the only thing this means is that all plaquettes must be triangles. In practice this is not a terrible restriction, because we can always add edges to a given lattice to ensure that it satisfies this condition, as shown in \cref{fig:simplices}a\footnote{Note that this is not a very unusual trick, see for example the triangulation used by Lieb in \cite{lieb_fluxes_2004}.}. 
 
 \begin{figure}
     \centering
@@ -354,7 +369,7 @@ The first thing to know is that their construction is defined specifically for a
     \label{fig:simplices}
 \end{figure}
 
-Let us start by defining what a simplex is. A 0-simplex, denoted by $(i)$ is simply a vertex on the lattice, labelled at position $i$. To construct higher form simplices, we can add a vertex to a given simplex, provided that it is adjacent to all the vertices in that simplex. I.e.~$(i,j)$ is a 1-simplex which labels an edge from site $i$ to site $j$, whereas $(i,j,k)$ labels a triangle from $i$ to $j$ to $k$, as shown in Fig.~\ref{fig:simplices}b. Note that all simplices have the property that they are antisymmetric under permutation of thier indices. That is, for a general permutation $\mathcal P$
+Let us start by defining what a simplex is. A 0-simplex, denoted by $(i)$ is simply a vertex on the lattice, labelled at position $i$. To construct higher form simplices, we can add a vertex to a given simplex, provided that it is adjacent to all the vertices in that simplex. I.e.~$(i,j)$ is a 1-simplex which labels an edge from site $i$ to site $j$, whereas $(i,j,k)$ labels a triangle from $i$ to $j$ to $k$, as shown in \cref{fig:simplices}b. Note that all simplices have the property that they are antisymmetric under permutation of thier indices. That is, for a general permutation $\mathcal P$
 \begin{align}
     (P(j), P(j), P(k), ..., P(n)) = \textup{sgn}(P) (i,j,k,...,n).
 \end{align}
@@ -367,12 +382,16 @@ Now we can use the set of all $n$-simplices as a basis for constructing fields! 
 \end{align}
 where the general field term must always be antisymmetric under permutation of the indices, eg:
 \begin{align}
-    \beta_{ijk} = - \beta{jik}
+    \beta_{ijk} = - \beta_{jik}
 \end{align}
 
 \begin{shaded}
     It might make sense to include a factor of $\frac 1{n!}$ in the field term of a general $n$-form... This would line up nicely with the continuous theory of differential forms. Let's see later if we want to introduce it.
 \end{shaded}
+
+\begin{incorrect}
+    Another detail Ihave glossed over -- really one should distinguish between chains and cochains. 
+\end{incorrect}
 
 \subsection{Derivative Operators}
 
@@ -396,7 +415,7 @@ The boundary is a map from $n$-simplices to $(n-1)$-simplices. The operation is 
 \begin{align}
     \partial (i,j,k,l,...) = (j,k,l,...) - (i,k,l,...) + (i,j,l,...) - (i,j,k,...) + ...
 \end{align}
-That is, we form a sum of every simplex formed by dropping one vertex, with the sign determined by whether the position of the deleted vertex is odd or even. Let us calculate a few examples, which are shown visually in Fig.~\ref{fig:boundaries},
+That is, we form a sum of every simplex formed by dropping one vertex, with the sign determined by whether the position of the deleted vertex is odd or even. Let us calculate a few examples, which are shown visually in \cref{fig:boundaries},
 \begin{align}
     \partial (i) &= 0, \\
     \partial (i,j) &= (j) - (i), \\
@@ -427,12 +446,22 @@ where the second sum is over all vertices $j$ adjacent to $i$. This is rather pr
     \sum_{[k]\rightarrow [i,j]}
     \beta_{ijk},
 \end{align}
-where the second sum is over all vertices $k$ that are adjacent to \textit{both} $i$ and $j$. This is even more promising! Imagining $\beta$ as a quantity like vorticity, this calculates exactly the current that would be generated on the edge $(i,j)$ as a consequence of difference in vorticity in the two adjacent triangles. I.e. this looks a lot like a curl!
+where the second sum is over all vertices $k$ that are adjacent to \textit{both} $i$ and $j$. This is even more promising! Imagining $\beta$ as a quantity like vorticity, this calculates exactly the current that would be generated on the edge $(i,j)$ as a consequence of difference in vorticity in the two adjacent triangles. I.e. this looks a lot like a curl! The boundary of a general $n$-field may be calculated using the two equivalent forms
+\begin{align}
+    \partial \gamma &=\sum_{[v_0, ... ,v_{n}]} \gamma_{ v_0, ... ,v_{n}}
+    \sum_{m = 0}^n (-1)^m
+    (v_0, ...,\hat v_m,... ,v_{n}) 
+    \\
+    &=\sum_{[v_1, ... ,v_{n}])} (v_1, ... ,v_{n}) 
+    \sum_{[v_0]\rightarrow [v_0, ... ,v_{n}]}
+    \gamma_{v_0, v_1, ... ,v_{n}}.
+\end{align}
+
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figs/maps_to_forms_boundaries.pdf}
-    \caption{We repeat the hierarchy of operations depicted in Fig.~\ref{fig:maps_to_forms}, now showing the action of the boundary and coboundary operators.}
+    \caption{We repeat the hierarchy of operations depicted in \cref{fig:maps_to_forms}, now showing the action of the boundary and coboundary operators.}
     \label{fig:maps_to_forms_boundaries}
 \end{figure}
 
@@ -454,7 +483,19 @@ As before, we might notice that this operator acts a bit like a discrete version
     d\alpha &= \sum_{[j,k]} \sum_{[i]\rightarrow [j,k]} \alpha_{jk} (i,j,k), \\
     & = \sum_{[i,j,k]}(\alpha_{ij} - \alpha_{ik} + \alpha_{jk}) (i,j,k)
 \end{align}
-Again, treating $\alpha_{jk}$ as a current this looks a lot like a curl operator! In fact, by considering Fig.~\ref{fig:maps_to_forms} we can see that the boundary and coboundary operators correspond exactly to the differential operators that can map continuous fields between the different `levels'.
+Again, treating $\alpha_{jk}$ as a current this looks a lot like a curl operator! In fact, by considering \cref{fig:maps_to_forms} we can see that the boundary and coboundary operators correspond exactly to the differential operators that can map continuous fields between the different `levels'. The coboundary of a general $n$-field may be calculated using the two equivalent forms:
+\begin{align}
+    d\gamma
+    & = \sum_{[v_1, ... , v_{n+1}]}\alpha_{v_0...v_n}\sum_{[v_0]\rightarrow [v_1, ... , v_{n+1}]}
+    (v_0, ... , v_{n+1})
+    \\
+    &= \sum_{[v_0, ... , v_{n+1}]}
+    (v_0, ... , v_{n+1})
+    \sum_{m = 0}^{n+1}(-1)^m
+    \gamma_{v_0...\hat v_m...v_{n+1}},
+\end{align}
+where $\hat v$ indicates that this index is omitted.
+
 
 \subsubsection{Inner Product and Stokes Theorem}
 
@@ -466,12 +507,12 @@ To complete this discussion of our discrete calculus, we must also define a disc
 \end{align}
 We must also define an inner product on forms, given by
 \begin{align}
-    \inner{(i)(l)} & = \delta_{i,l},\\
-    \inner{(i,j)(l,m)} & = \delta_{i,l}\delta_{j,m} -\delta_{i,m}\delta_{j,l}.
+    \inner{(i),(l)} & = \delta_{i,l},\\
+    \inner{(i,j),(l,m)} & = \delta_{i,l}\delta_{j,m} -\delta_{i,m}\delta_{j,l}.
 \end{align}
 for a general $m$-form the inner product is given by
-\begin{align}
-    \inner{(i,j,k,...)}{(l,m,n,...)} = \textup{det}\begin{pmatrix}
+\begin{align}\label{eqn:inner_prod_determinant}
+    \inner{(i,j,k,...),(l,m,n,...)} = \textup{det}\begin{pmatrix}
         \delta_{il} & \delta_{im} & \delta_{in}\\
         \delta_{jl} & \delta_{jm} & \delta_{jn}& \cdots\\
         \delta_{ikl} & \delta_{ikm} & \delta_{kn}\\
@@ -501,56 +542,290 @@ and we have the discrete form of Stokes' law, in a completely elegant form.
 
 \subsection{Products}
 
-\begin{shaded}
-    I'll fill this in properly later -- there has to be a much nicer and more general picture than what is in the paper \cite{schwalm_vector_1999} where they derive slowly and painfully the correct version of each type of product such that the theory respects the standard set of vector calculus identities. I think there is a more general perspective where these different expressions should all look obvious (i.e.~we want to find the generalisation of the exterior product from diff.~forms to these simplices) for now let's just stick the relevant identities in and move on with the Chern Simons stuff. Later on I will come back and figure out how to do this.
-\end{shaded}
-
-\subsubsection{Scalar Multiplication}
-
-
-Scalar multiplication basically amounts to taking a product between a 0-form and a (something else)-form. Let's put down the general identities for the product between a 0-form $\phi$ and an $n$-form $\xi$,
-\begin{align}\begin{aligned}
-    \phi \xi &= 
-    \left (
-    \sum_{[i] } \phi_i (i)
-    \right )
-    \left (
-    \sum_{[i,j,k,...,m] }\xi_{ijk...m} (i,j,k,...,m)
-    \right ) \\
-    &=\sum_{[i,j,k,...,m]}
-    \frac 1n (\phi_i + \phi_j + \phi_k + ... + \phi_m)
-    \xi_{ijk...m} (i,j,k,...,m)
-\end{aligned}
-\end{align}
-Basically what is happening here is that each vertex that touches the $n$-form contributes $\frac 1n$ of its field value to the product. 
-
-
-
-\subsubsection{Dot Products}
-\begin{shaded}
-    We don't actually need these yet...
-\end{shaded}
-
-\subsubsection{Cross Products}
-
-A cross product of two 1-forms creates a 2-form. We will define the cross product between two 1-fields $\alpha$ and $\sigma$ as 
+This is the point where \cite{schwalm_vector_1999} loses my interest a bit. Their next step is to write down a list of about ten vector calculus identities. Things like 
 \begin{align}
-    \alpha \times \sigma = 
-    \sum_{[i,j,k]} \frac 16 \left [ 
-    (\alpha_{ki} +\alpha_{kj} )\sigma_{ij}
-    + (\alpha_{ij} +\alpha_{ik} )\sigma_{jk}
-    + (\alpha_{ji} +\alpha_{jk} )\sigma_{ki}
-    \right ](i,j,k)
+    \nabla \cdot (\rho \textbf A)
+    & = \nabla \rho \textbf A + \rho \nabla\cdot \textbf A,\\
+    \nabla \cdot (\textbf A \times  \textbf B)
+    & = 
+    \nabla \times \textbf A\cdot  \textbf B - 
+     \textbf A\cdot  \nabla \times\textbf B ,
 \end{align}
+basically all the super standard vector identities. Obviously, for the discrete field theory to look like what we expect, we want our definitions of products to be defined in such a way that the `differential operators' discussed above follow the correct generalisation of the chain rule. From their analysis, it feels like they don't really find a universal rule for a product of chains -- or if they did they wrote it really shittily. Actually one exists and it took me a day to work it out.
+
+Let's start by writing down a few of the identities that are presented in \cite{schwalm_vector_1999}:
+\begin{itemize}
+    \item \textbf {Scalar Multiplication} 
+     basically amounts to taking a product between a 0-form and a (something else)-form. Let's put down the general identities for the product between a 0-form $\phi$ and an $n$-form $\xi$,
+    \begin{align}\begin{aligned}
+        \phi \xi &= 
+        \left (
+        \sum_{[i] } \phi_i (i)
+        \right )
+        \left (
+        \sum_{[i,j,k,...,m] }\xi_{ijk...m} (i,j,k,...,m)
+        \right ) \\
+        &=\sum_{[i,j,k,...,m]}
+        \frac 1n (\phi_i + \phi_j + \phi_k + ... + \phi_m)
+        \xi_{ijk...m} (i,j,k,...,m)
+    \end{aligned}
+    \end{align}
+
+    \item \textbf {Cross Products} 
+     between two 1-forms create a 2-form. We will define the cross product between two 1-fields $\alpha$ and $\sigma$ as 
+    \begin{align}
+        \alpha \times \sigma = 
+        \sum_{[i,j,k]} \frac 16 \left [ 
+        (\alpha_{ki} +\alpha_{kj} )\sigma_{ij}
+        + (\alpha_{ij} +\alpha_{ik} )\sigma_{jk}
+        + (\alpha_{ji} +\alpha_{jk} )\sigma_{ki}
+        \right ](i,j,k)
+    \end{align}
+
+    \item \textbf {Dot Products} between two 1-forms are written as 
+    \begin{align}
+        \alpha \cdot \beta = \sum_{[i]} 
+        \sum_{[j]\rightarrow [i]} 
+        \frac 12 \alpha_{ij}\beta_{ij} (i)
+    \end{align}
+    and take you to a 0-form
+\end{itemize}
+To find a nice general theory for this, we will construct -- in analogy with the derivative operators -- two different product operators that either take you up or down in the hierarchy of chains
+
 \begin{shaded}
-    This is all we really need for Chern Simons Theory, although it would be really nice to have a more complete framework where products felt more natural...
+    The next sections borrow heavily from the \textit{Serious Algebraic Topology} literature. In particular, this stuff is simplified from staring confusedly at Hatcher's book \cite{hatcher_algebraic_2002}, in particular the chapters on homology and cohomology. In general, since we work with MUCH less pathological spaces than mathematicians generally do, we have a lot of space to really simplify their definitions. I.e. did you know that a cochain and a chain is basically just the same thing in a finite compact space? Took me ages to figure that out lol ;) 
+    
+    Note, I borrow the names for these operators from their names in algebraic topology. 
 \end{shaded}
+
+\subsubsection{The Cup Product}
+
+Let us develop an argument for the form of a product first. Following the general form of the vector calculus identities, we know that we want to take a product of an $n$-field and an $m$-field to create an $(n+m)$-field,
+\begin{align}
+    \alpha^n \smile \beta^m = \gamma ^{n+m}.
+\end{align}
+In general, an $n$-simplex has $(n+1)$ vertices in its definition, so we expect the product of an $n$ and $m$ simplex to have $(n+m+1)$ vertices in its definition. 
+
+Thus, one might start by defining a product that looks a bit like matrix multiplication
+\begin{align} \label{eqn:simplex_otimes}
+    (v_0, v_1,  ... ,v_n)\otimes (w_0, w_1, ... ,w_m) = \delta_{v_n, w_0} (v_0, v_1, ... ,v_n, w_1, ... ,w_m),
+\end{align}
+however such a product is not sufficient. This is because this operator has the undesirable property that 
+\begin{align}
+    (i,j) \otimes (k,l) \neq - (i,j) \otimes (l,k).
+\end{align}
+\begin{incorrect}
+    
+Thus, in order to construct a viable product operator, we will have to actively anti-symmetrise over every possible ordering of the indices in each simplex
+\begin{align}\label{eqn:simplex_cup_product}
+    (v_0, v_1, ... ,v_n) \smile (w_0, w_1, ... ,w_m) 
+    &= 
+    \sum_{P,Q} 
+    \frac{\sgn(P)\sgn(Q) }{(n+m+1)!}
+    (v_{p_0}, v_{p_1}, ... ,v_{p_n}) 
+    \otimes 
+    (w_{q_0}, w_{q_1}, ... ,w_{q_m}),\\
+    & = \sum_{P,Q} 
+    \frac{\sgn(P)\sgn(Q) }{(n+m+1)!}
+    \delta_{v_{p_n}w_{q_0}}
+    (v_{p_0}, v_{p_1}, ... ,v_{p_n}, w_{q_1}, ... ,w_{q_m})
+\end{align}
+where $P$ and $Q$ are two different permutations, and the reason for the normalisation will become clear in the next paragraph. 
+\end{incorrect}
+
+\begin{shaded}
+    A little bit like the inner product formula given above (\cref{eqn:inner_prod_determinant}), this looks much more complex than it actually is. To see why first notice that in \cref{eqn:simplex_otimes}, the product we defined with $\otimes$ will vanish unless the $v$ and $w$ simplices share exactly one common vertex -- the last vertex in $v$ and the first in $w$. Of course if $v_n$ and $w_0$ differ we vanish due to the $\delta$-function. However if any other vertices are shared by both simplices, the resultant big simplex $(v,...w,...)$ will have a repeat index and so must vanish by antisymmetry under reordering! Thus we may assume that any product basically looks like
+    \begin{align}
+        (...,v_j, v, v_{j+1} ,...) \smile (...,w_j, v, w_{j+1} ,...),
+    \end{align}
+    where all the labels with subscripts are distinct. Now all we must do is swap indices around until the common index is in the right place:
+    \begin{align}
+        = (\pm 1) (...,v_j, v_{j+1} ,...,v ) \smile (v,...,w_j, w_{j+1} ,...),
+    \end{align}
+    and the product is formed by joining the two simplices together into 
+    \begin{align}
+    = (\pm 1)(...,v_j, v_{j+1} ,...,v, ...,w_j, w_{j+1} ,...).
+    \end{align}    
+    Simple!
+\end{shaded}
+
+Now, let us look at the effect of this term on a product of two fields, 
+\begin{align}
+    \alpha^n = \sum_{[v_0, ..., v_n]}\alpha_{v_0 ...v_n}( v_0, ..., v_n), 
+    \textup{ and } 
+    \beta^m = \sum_{[w_0, ..., w_m]}\beta_{w_0 ...w_m}( w_0, ..., w_m),
+\end{align} 
+which can be written in the form
+\begin{align}\label{eqn:field_cup_product}
+    \alpha^n \smile \beta^m = \sum_{[v_0, ...,v_{n+m}]} 
+    \sum_{P} \frac{\sgn(P)}{(n+m+1)!} \alpha_{p_0 ...p_n}\beta_{p_n ...p_{n+m}} (v_0, ...v_n,...,v_{n+m}).
+\end{align}
+Finally, note that this cup product satisfies
+\begin{align}
+    \alpha^n \smile \beta^m = (-1)^{nm} \beta^m \smile \alpha^n.
+\end{align}
+
+\peru{\cref{eqn:simplex_cup_product} is not correct -- but \cref{eqn:field_cup_product} is correct. The exact form of the product acting on individual simplices is rather complex -- see section 3B (the K\"unneth formula) of Hatcher to understand why...
+}
+
+Let us apply this product and see what the result is when different fields are multiplied. In two dimensions there are two broad cases. Let's look at them individually.
+
+\begin{itemize}
+    \item {\bf Multiplication With a 0-field}
+When multiplying a 0-field, $\phi^0$, with an $m$-field $\beta^m$, the sum over permutations in expression \ref{eqn:field_cup_product} takes the form
+\begin{align}
+    \sum_{P} \frac{\sgn(P)}{(m+1)!} \phi_{p_0}\beta_{p_0 ...p_{m}} = \frac{1}{m+1}(\phi_{v_0}+\phi_{v_1}+ ... +\phi_{v_m})
+    \beta_{v_0...v_m},
+\end{align}
+so the general form of such a multiplication is
+\begin{align}
+    \phi^0 \smile \beta^m = \sum_{[v_0, ... ,v_m]}\frac 1 {m+1}
+    (\phi_{v_0}+\phi_{v_1}+ ... +\phi_{v_m})
+    \beta_{v_0...v_m}
+    (v_0,...,v_{m}).
+\end{align}
+That is, the product is just a weighted sum of the 0-field over every $m$-simplex. Simple. Thus we see that here the cap product plays the role of multiplication between a scalar field and any other field. 
+
+\item{\bf Multiplication With a 1-field}
+In 2D, there is only one other cup product we can take that is non-vanishing, the product of two 1-fields to produce a 2-field. Given what we know about taking products of vectors (1-fields) to get pseudo-vectors (2-fields), we expect that this should give us the formula for a cross product. writing out all terms explicitly, we arrive at the following expression
+\begin{align}
+    \alpha^1 \smile \beta^1 = \sum_{[i,j,k]}\frac{1}{6}
+    (
+    \alpha_{ij} \beta_{jk}
+    +\alpha_{jk} \beta_{ki}
+    +\alpha_{ki} \beta_{ij}
+    -\alpha_{ik} \beta_{kj}
+    -\alpha_{kj} \beta_{ji}
+    -\alpha_{ji} \beta_{ik}
+    )
+    (i,j,k)
+\end{align}
+Again, this looks complex until you realise all the positive and negative terms are just the six positive and negative permutations of $i,j,k$.
+\end{itemize}
+
+\subsubsection{The Cap Product}
+There's still one product missing -- the dot product -- which takes a pair of 1-fields or a pair of 2-fields to a 0-field. Again borrowing from algebraic geometry, this can be constructed using an equivalent to their cap product, which takes a product of an $n$-field and an $m$-field to produce an $(n-m)$-field:
+\begin{align}
+    \alpha^n \frown \beta^m = \gamma ^{n-m}
+\end{align}
+Lets try and build it as we did before, starting with a guess, if we want to take a product of an $n$-simplex and an $m$-simplex to produce an $(n-m)$-simplex, the most obvious way to do it is basically by identifying the `first' $m+1$ vertices shared by both simplices
+\begin{align}
+    (v_0, v_1, ... ,v_n)\odot(w_0, w_1, ... ,w_m) 
+    = 
+    \delta_{v_0 w_0}
+    \delta_{v_1 w_1}
+    ...
+    \delta_{v_m w_m}
+    (v_m,...,v_n)
+\end{align}
+Again, we run into the same problems as before, that is, this operator is not antisymmetric under a swap of its indices, for example
+\begin{align}
+    (i,j,k)\odot (l,m) \neq - (i,k,j) \odot (l,m).
+\end{align}
+\begin{incorrect}
+    
+To fix this, we must again antisymmetrise over all possible orientations of the higher order simplex
+\begin{align}
+    (v_0, v_1, ... ,v_n)\frown(w_0, w_1, ... ,w_m) 
+    &=
+    \sum_{P} 
+    \frac{\sgn(P) }{(n+1)!}
+    (v_{p_0}, v_{p_1}, ... ,v_{p_n}) 
+    \odot 
+    (w_0, w_1, ... ,w_m),\\
+    &= 
+    \sum_{P} 
+    \frac{\sgn(P)}{(n+1)!}
+    \delta_{p_0 w_0}
+    \delta_{p_1 w_1}
+    ...
+    \delta_{p_m w_m}
+    (p_{m}, p_{m+1},...,p_n).
+\end{align}
+\peru{Again, I need to check that this expression is correct -- I know that \cref{eqn:field_cap_product} is right -- but there's definitely a mistake here in the above expression.}
+\end{incorrect}
+Now, let us look at the effect of this on a product of two fields,\footnote{note that the sign of the permutations has been absorbed by the antisymmetric properties of the tensors $\alpha_{p...}$ and $\beta_{p...}$.}
+\begin{align}\label{eqn:field_cap_product}
+    \alpha^n \frown \beta^m = \sum_{[v_0, ...,v_{n}]} 
+    \sum_{P} \frac{\sgn(P)}{(n+1)!} \alpha_{p_0 ...p_n}\beta_{v_0 ...v_m} (v_m,...,v_{n}),
+\end{align}
+
+Let us apply this product and see what the result is when different fields are multiplied. Unlike the cap product case, there are a few more cases to consider
+
+\begin{itemize}
+    \item {\bf Multiplication With a 0-field}
+When multiplying an $n$-field $\alpha^n$ with a 0-field, $\phi^0$, the sum over permutations in expression \ref{eqn:field_cup_product} takes the form
+\begin{align}
+    \sum_{P} \frac{1}{(n+1)!} \phi_{p_0}\beta_{p_0 ...p_{n}} = \frac{1}{n+1}(\phi_{v_0}+\phi_{v_1}+ ... +\phi_{v_n})
+    \beta_{v_0...v_n},
+\end{align}
+so the general form of such a multiplication is
+\begin{align}
+    \beta^n \frown \phi^0 = \sum_{[v_0, ... ,v_m]}\frac 1 {n+1}
+    (\phi_{v_0}+\phi_{v_1}+ ... +\phi_{v_n})
+    \beta_{v_0...v_n}
+    (v_0,...,v_{n}).
+\end{align}
+That is, this looks exactly like the cup product! Basically, scalar multiplication is boring.
+
+\item{\bf Multiplying an $n$-field with an $n$-field}
+Here we will basically be looking for something like a dot product, which always maps vector fields back to scalar fields. Plugging in \cref{eqn:field_cap_product}, we see that the product of two 1-fields is
+\begin{align}
+    \alpha^1 \frown \beta^1 &= \sum_{[i,j]}\frac 12 \alpha_{ij}\beta_{ij} \left [ (i) + (j)\right ], \\
+    &= \sum_{[i]} \sum_{[j]\rightarrow [i]}\frac 12 \alpha_{ij}\beta_{ij} (i).
+\end{align}
+Similarly, the cap product of a pair of 2-fields is given by
+\begin{align}
+    \alpha^2 \frown \beta^2 = \sum_{[i,j,k]} \frac 13 \alpha_{ijk} \beta_{ijk} \left [ (i) + (j) + (k) \right ]
+\end{align}
+
+
+\item{\bf Multiplying a $2$-field with a $1$-field}
+Honestly, when will we ever need this -- this term multiplies a B and E field to get an object that behaves like an E-field -- basically a cross product between 2 and 1-fields. I'll fill this in if i need it but honestly I'm sick of thinking really hard about where these permutation signs go...
+
+\end{itemize}
+
+\subsubsection{A Duality between the cup and cap product}
+The cap and cup product satisfy a nice duality, reminiscent of Stokes' theorem. For an $n$-field $\alpha$, an $m$-field $\beta$ and an $(n+m)$-field $\gamma$,
+\begin{align}
+    \inner{\gamma, \alpha \smile \beta}
+    =
+    \inner{\gamma \frown \alpha , \beta }.
+\end{align}
+The proof is from directly evaluating the inner product
+\begin{align}
+    \inner{ \gamma,\alpha \smile \beta} &=
+    \sum_{[v_0 ... v_{n+m}]} \gamma_{v_0,...v_{n+m}}
+    \sum_{P}\frac{\sgn(P)}{(n+m+1)!}
+    \alpha_{p_0...p_n}\beta_{p_n...p_{n+m}} \\
+    &= \sum_{[v_0 ... v_{n+m}]}
+    \beta_{v_n...v_{n+m}}
+    \sum_{P}\frac{\sgn(P)}{(n+m+1)!}
+    \gamma_{p_0,...p_{n+m}}
+    \alpha_{v_0...v_n}\\
+    &= \inner{\gamma \frown \alpha , \beta }
+\end{align}
+
+\subsection{The Chain Rule}
+Finally, we have a definition of two derivatives, $\partial$ and $d$, and a definition of two products, $\smile$ and $\frown$. In Appendix \ref{apx:chain_proof} we prove the following two relations hold
+
+\begin{align}
+    d (\alpha^n \smile \beta^m) &= 
+    d \alpha^n \smile \beta^m + 
+    (-1)^n \alpha^n \smile d\beta^m,\\
+    \partial (\alpha^n \frown \beta^m) &= 
+    (-1)^m 
+    \left (
+    \partial \alpha^n \frown \beta^m - 
+    \alpha^n \frown d\beta^m
+    \right ).
+\end{align}
 
 \section{Chern Simons on Any Lattice}
 
 Now let us apply the developed discretisation procedure to create  a lattice Chern Simons theory. We start as ever by restating the continuous-space action
 \begin{align}
-    S = \frac{k}{2\pi}
+    S = \frac{k}{4\pi}
     \int dt \int d^2x
     \left [  
     A_0  B -
@@ -558,70 +833,120 @@ Now let us apply the developed discretisation procedure to create  a lattice Che
     \nabla A_0  \times  \textbf {A}
     \right ].
 \end{align}
-Let us make our substitutions for the simplicial versions of these fields:
+Let us make our substitutions for the simplicial versions of these fields, which involve a 0-field $\phi$ and a 1-field $\alpha$
 \begin{align}
-    A_0 \rightarrow \rho = \sum_{[i]}\rho_i(i),\\
+    A_0 \rightarrow \phi = \sum_{[i]}\phi_i(i),\\
     \textbf A \rightarrow \alpha = \sum_{[i,j]}\alpha_{ij} (i,j).
 \end{align}
 Next, we can calculate the two derivative forms in the expression
 \begin{align}
-    \nabla A_0 \rightarrow d\rho &= \sum_{[i,j]}(\rho_j - \rho_i) (i,j),\\
+    \nabla A_0 \rightarrow d\phi &= \sum_{[i,j]}(\phi_j - \phi_i) (i,j),\\
     B \rightarrow d\alpha  &= \sum_{[i,j,k]} ( \alpha_{ij} + \alpha_{jk} + \alpha_{ki}) (i,j,k)
 \end{align}
 Therefore we can write the integrand in the form
 \begin{align}
-    \rho d\alpha - \alpha \times \dot \alpha + \alpha 
-    \times d\rho. 
+    \mathcal L  = \frac k{4\pi} \left (  \phi \smile d\alpha 
+    - \alpha \smile \dot \alpha 
+    -d\phi \smile \alpha
+    \right ).
 \end{align}
-Defining a 2-chain that covers the whole complex (i.e. all of space),
+This integrand takes the form of a 2-field, therefore to write the integral, one must define a 2-chain that covers the whole complex (i.e. all of space),
 \begin{align}
     C = \sum_{[i,j,k]} (i,j,k)
 \end{align}
 we can write the action in the form
 \begin{align}
-    S = \frac k{2\pi} \int dt \inner{C, 
-    \rho d\alpha 
-    - \alpha \times \dot \alpha 
-    -  d\rho \times \alpha
+    S = \frac k{4\pi} \int dt \inner{C, 
+    \phi \smile d\alpha 
+    - \alpha \smile \dot \alpha 
+    -d\phi \smile \alpha
     }
 \end{align}
-\begin{shaded}
-    {\it Single mom finds one weird vector identity for simplifyinf equations FAST --- } There is only one vector identity that is really relevant to this action, and it is the same one we used in \textsection{\ref{sec:continuous_special_time}}:
-    \begin{align} 
-            \nabla \times (a \textbf{A}) = \nabla a \times \textbf{A} + a \nabla \times \textbf{A},
-        \end{align}
-        where $a$ is a scalar and $\textbf A$ is a 1-field. Let us derive the simplicial equivalent of this expression
-        \begin{align}
-            d(\rho \alpha) = \sum_{[i,j]}\frac 12 (\rho_i + \rho_j) \alpha_{ij} d(i,j),
-        \end{align}
-        where we have used the definition presented above for 0-1-form multiplication. Taking the coboundary of (i,j) we arrive at the following
-        \begin{align}
-             d(\rho \alpha) &= \sum_{[i,j,k]}\frac 12 
-             \left [
-             (\rho_i + \rho_j)\alpha_{ij}
-             + (\rho_j + \rho_k)\alpha_{jk}
-             +(\rho_k + \rho_i)\alpha_{ki}
-             \right ]
-        \end{align}
-    which is rearranged to the form
-    \begin{align}
-        \begin{aligned}
-            d(\rho \alpha) &= \sum_{[i,j,k]} \frac 13 (\phi_i + \phi_j +\phi_k)(\alpha_{ij} + \alpha_{jk}+\alpha_{ki}) \\ 
-            &
-            + \sum_{[i,j,k]} \frac 16 \bigg [
-            [(\phi_i - \phi_k) + (\phi_j - \phi_k)]\alpha_{ij}
-            + [(\phi_j - \phi_i) + (\phi_k - \phi_i)]\alpha_{jk}\\& \qquad \qquad 
-            + [(\phi_k - \phi_j) + (\phi_i - \phi_j)]\alpha_{ki}
-            \bigg ] (i,j,k)
-        \end{aligned}
-    \end{align}
-    This looks like a mess, but consulting our earlier identities for cross and scalar product, we can actually see that this exactly evaluates
-    \begin{align}
-        d(\rho \alpha) = \rho d\alpha + d\phi \times \alpha.
-    \end{align}
-\end{shaded}
+% now we can clean this up with the chain rule, since we know that
+% \begin{align}
+%     d(\phi \smile \alpha) = 
+%     d\phi \smile \alpha + 
+%     \phi \smile d\alpha
+% \end{align}
+% we may write this as 
+% \begin{align}
+%     S = \frac{k}{2\pi} \int dt \inner{C,
+%     \phi \smile d\alpha 
+%     - \frac 12 \alpha \smile \dot \alpha
+%     } -
+%     \frac{k}{4\pi} \int dt \inner{C,
+%     d(\phi \smile \alpha )
+%     },
+% \end{align}
+% where we can use Stokes' theorem to cancel out the last term since
+% \begin{align}
+%     \inner{C,
+%     d(\phi \smile \alpha )
+%     } = \inner{\partial C,
+%     \phi \smile \alpha 
+%     },
+% \end{align}
+% which vanishes if we assume we are integrating over the whole space (i.e. $C$ has no boundary).
+
 
 \subsection{Gauge Transformations}
 
-\bibliography{refs}
+Let us consider the effect of a gauge transformation, performed by making the following changes to the fields
+\begin{align}
+    \phi &\rightarrow \phi + \dot \chi, \\
+    \alpha &\rightarrow \alpha + d\chi,
+\end{align}
+where $\chi$ is some arbitrary 0-field. Applying this transformation to the action we arrive at
+\begin{align}
+    \mathcal L &\rightarrow \mathcal L + \frac{k}{2\pi} \left [
+    \dot \chi \smile d\alpha
+    - d\chi \smile \dot \alpha
+    + d\chi \smile d\phi
+    \right]
+\end{align}
+Now we can proceed exactly as we did in \textsection\ref{sec:continuous_special_time}, using the following two chain rule identities
+\begin{align}
+    d(\chi \smile \dot \alpha) &= d\chi \smile \dot\alpha + \chi \smile d\dot\alpha, \\
+    d(\chi \smile d \phi) &= d\chi\smile d \phi,
+\end{align}
+where the latter identity uses $d^2 = 0$, to get the following
+\begin{align}
+    \mathcal L &\rightarrow \mathcal L + \frac{k}{2\pi} \left [
+    \partial_t(\chi\smile d\alpha)
+    + d(\chi\smile d \phi - \chi\smile \dot \alpha)
+    \right].
+\end{align}
+This term is a total derivative, so we have verified gauge invariance!
+
+\subsection{Coupling to a Current}
+
+Now we would like to introduce a coupling to an external current, that is we would like to add in the term
+\begin{align}
+    A_\mu J^\mu = A_0 J_0 + \textbf A \cdot \textbf J
+\end{align}
+
+\begin{incorrect}
+    Many questions here -- clearly for this term to have the same form-type (the rest of the Lagrangian is a 2-form) this term must also be a 2-form. That implies that $J_0$ has to be a 2-form. This would make sense if we assumed that the gauge field lives on the triangulated lattice and the matter field lives on the dual lattice -- which would be a three coordinated lattice. This is very tempting when one is thinking about applying this to the Kitaev Honeycomb model.
+
+    Making the identification:
+    \begin{align}
+        J_0 \rightarrow \mu &= \sum_{[i,j,k]}\mu_{ijk}(i,j,k) \\
+        \textbf J \rightarrow \xi &= \sum_{[j,k]}\xi_{jk} (j,k)
+    \end{align}
+    Then, the temptation is to write the term as 
+    \begin{align}
+        A_\mu J^\mu \rightarrow \phi \smile \mu + \alpha \smile \xi
+    \end{align}
+    I suspect this is not correct ... the first term looks alright but the second term looks suspicious, since we have identified a dot product with $\smile$ which generally describes cross products between pairs of $1$-fields. 
+
+    I think the solution here is to think carefully about the dual lattice -- which corresponds to exchanging $m$-fields for $(d-m)$-fields. A cup and cap product on the regular lattice will induce a dual product operation on the dual lattice. 
+
+    Still a lot to think about.
+    
+\end{incorrect}
+
+\printbibliography
+
+\input{appendix}
+
 \end{document}
